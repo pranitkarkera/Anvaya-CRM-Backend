@@ -21,32 +21,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Initialize database connection
-let dbReady;
-try {
-  dbReady = initializeDatabase();
-  console.log('Database initialization started');
-} catch (err) {
-  console.error('Database initialization failed:', err);
-}
+initializeDatabase();
+app.listen(PORT, () => console.log(`Server is listening on port ${PORT} `));
 
-// Middleware to ensure DB is connected
-app.use(async (req, res, next) => {
-  if (!dbReady) {
-    return res.status(500).json({ error: 'Database connection not initialized' });
-  }
-
-  try {
-    await dbReady;
-    await mongoose.connection.db.admin().ping();
-    next();
-  } catch (err) {
-    console.error('Database connection error:', err);
-    res.status(503).json({ error: 'Database unavailable' });
-  }
-});
-
-// Basic route
 app.get('/', (req, res) => res.send('Hello, Express'));
 
 //salesAgent
@@ -390,23 +367,4 @@ app.get('/report/last-week', async (req, res) => {
   }
 });
 
-// Health check endpoint
-app.get('/health', async (req, res) => {
-  try {
-    await mongoose.connection.db.admin().ping();
-    res.json({
-      status: 'healthy',
-      database: 'connected',
-      timestamp: new Date()
-    });
-  } catch (err) {
-    res.status(500).json({
-      status: 'unhealthy',
-      database: 'disconnected',
-      error: err.message
-    });
-  }
-});
-
-// Export the app for Vercel
 module.exports = app;
