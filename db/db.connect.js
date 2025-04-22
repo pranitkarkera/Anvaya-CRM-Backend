@@ -3,6 +3,7 @@ require("dotenv").config();
 
 const MONGODB_URL = process.env.mongodb_uri;
 
+
 let cachedConnection = null;
 
 const initializeDatabase = async () => {
