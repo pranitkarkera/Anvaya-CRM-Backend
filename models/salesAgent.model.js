@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 // Sales Agent Schema
 const salesAgentSchema = new mongoose.Schema({
   name: {
