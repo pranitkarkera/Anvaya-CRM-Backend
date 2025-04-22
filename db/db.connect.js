@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URL = process.env.mongodb_uri;
 
 let cachedConnection = null;
 
@@ -11,7 +11,7 @@ const initializeDatabase = async () => {
   }
 
   try {
-    const connection = await mongoose.connect(MONGODB_URI, {
+    const connection = await mongoose.connect(MONGODB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: 5000,
